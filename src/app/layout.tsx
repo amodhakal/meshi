@@ -1,10 +1,11 @@
 import ConvexClientProvider from "@/components/ConvexClientProvider";
+import Header from "@/components/Header";
 import { ClerkLoaded, ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
 
 const font = Josefin_Sans({
   weight: "variable",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <ClerkProvider>
           <ClerkLoaded>
             <ConvexClientProvider>
+              <Header />
               {children}
               <SpeedInsights />
               <Analytics />
