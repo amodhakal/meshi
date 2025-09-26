@@ -3,6 +3,8 @@ import { ClerkLoaded, ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const font = Josefin_Sans({
   weight: "variable",
@@ -24,7 +26,11 @@ export default function RootLayout({
       <body className={`${font.className} antialiased`}>
         <ClerkProvider>
           <ClerkLoaded>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
+            <ConvexClientProvider>
+              {children}
+              <SpeedInsights />
+              <Analytics />
+            </ConvexClientProvider>
           </ClerkLoaded>
         </ClerkProvider>
       </body>
