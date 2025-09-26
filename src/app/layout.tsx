@@ -12,8 +12,7 @@ const font = Josefin_Sans({
 
 export const metadata: Metadata = {
   title: "Meshi",
-  description:
-    "An intelligent platform that empowers 3D artists by providing not just a portfolio, but a powerful tool for technical analysis and improvement.",
+  description: "A portfolio for 3d artists",
 };
 
 export default function RootLayout({
