@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const font = Josefin_Sans({
   weight: "variable",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <ClerkLoaded>
             <ConvexClientProvider>
               <Header />
+              <Toaster position="top-center" />
               {children}
               <SpeedInsights />
               <Analytics />
