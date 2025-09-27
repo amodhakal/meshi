@@ -21,7 +21,7 @@ export default function Header() {
   return (
     <>
       <header className="w-screen shadow rounded-t-none rounded-xl bg-gray-50">
-        <Container className="flex justify-between items-center p-4 gap-4">
+        <Container className="flex justify-between items-center py-4 gap-4">
           <div className="flex gap-8">
             <Link
               href="/"
