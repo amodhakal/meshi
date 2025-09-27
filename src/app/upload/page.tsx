@@ -7,11 +7,12 @@ import { useMutation } from "convex/react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../../../convex/_generated/api";
+import { VId } from "convex/values";
+import { Id } from "../../../convex/_generated/dataModel";
 
 export default function UploadPage() {
   const generateUploadUrl = useMutation(api.upload.generateUploadUrl);
-  const sendGlb = useMutation(api.upload.sendGlb);
-  const sendThumbnail = useMutation(api.upload.sendImage);
+  const uploadFiles = useMutation(api.upload.uploadFiles);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -59,7 +60,11 @@ export default function UploadPage() {
               htmlFor="designFile"
               className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
             >
-              <span className="text-gray-600">Click to upload .glb file</span>
+              <span className="text-gray-600">
+                {glbFile
+                  ? glbFile.name
+                  : "Click to upload .glb file"}
+              </span>
               <input
                 onChange={(e) => setGlbFile(e.target.files![0])}
                 type="file"
@@ -77,7 +82,11 @@ export default function UploadPage() {
                 htmlFor="thumbnail"
                 className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
               >
-                <span className="text-gray-600">Click to upload thumbnail</span>
+                <span className="text-gray-600">
+                  {thumbnailFile
+                    ? thumbnailFile.name
+                    : "Click to upload thumbnail"}
+                </span>
                 <input
                   onChange={(e) => setThumbnailFile(e.target.files![0])}
                   type="file"
@@ -109,8 +118,20 @@ export default function UploadPage() {
       });
     }
 
+    if (!description) {
+      return toast("Missing description", {
+        style: { backgroundColor: "red", color: "white" },
+      });
+    }
+
     if (!glbFile) {
       return toast("Missing .glb file", {
+        style: { backgroundColor: "red", color: "white" },
+      });
+    }
+
+    if (!thumbnailFile) {
+      return toast("Missing thumbnail file", {
         style: { backgroundColor: "red", color: "white" },
       });
     }
@@ -118,16 +139,25 @@ export default function UploadPage() {
     const glbUrl = await generateUploadUrl();
     const thumbnailUrl = await generateUploadUrl();
 
-    await Promise.all([
+    const { userId } = user;
+    const creatorId = userId!;
+
+    const data = await Promise.all([
       handleUpload(glbUrl, glbFile),
       handleUpload(thumbnailUrl, thumbnailFile),
     ]);
 
-    async function handleUpload(url: string, file: File | null | undefined) {
-      if (!file) {
-        return;
-      }
+    const [glbId, thumbnailId] = data as [string, string];
 
+    uploadFiles({ thumbnailId, glbId, title, description, creatorId });
+
+    setTitle("");
+    setDescription("");
+    setGlbFile(null);
+    setThumbnailFile(null);
+    toast("Meshi submitted");
+
+    async function handleUpload(url: string, file: File) {
       const result = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": file.type },
@@ -135,10 +165,7 @@ export default function UploadPage() {
       });
 
       const { storageId } = await result.json();
-      await sendGlb({ storageId, author: user.userId! });
+      return storageId;
     }
-
-    toast("Meshi submitted");
-    // TODO Store title and description, along with the info for glbFile and thumbnail file
   }
 }
