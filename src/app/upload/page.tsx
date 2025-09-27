@@ -29,7 +29,7 @@ export default function UploadPage() {
         </h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
-            <label htmlFor="title">Title: </label>
+            <label htmlFor="title">Title: <span className="text-red-500">*</span> </label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -52,7 +52,7 @@ export default function UploadPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="designFile">Upload .glb File</label>
+            <label htmlFor="designFile">Upload .glb File <span className="text-red-500">*</span></label>
             <label
               htmlFor="designFile"
               className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
