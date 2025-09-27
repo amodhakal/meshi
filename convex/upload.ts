@@ -7,25 +7,22 @@ export const generateUploadUrl = mutation({
   },
 });
 
-// TODO: Update to support all file types and integrate with rest of the storage
-export const sendGlb = mutation({
-  args: { storageId: v.id("_storage"), author: v.string() },
-  handler: async (ctx, args) => {
-    // await ctx.db.insert("messages", {
-    //   body: args.storageId,
-    //   author: args.author,
-    //   format: ".glb,model/gltf-binary",
-    // });
+export const uploadFiles = mutation({
+  args: {
+    thumbnailId: v.string(),
+    glbId: v.string(),
+    title: v.string(),
+    description: v.string(),
+    creatorId: v.string(),
   },
-});
-
-export const sendImage = mutation({
-  args: { storageId: v.id("_storage"), author: v.string() },
   handler: async (ctx, args) => {
-    // await ctx.db.insert("messages", {
-    //   body: args.storageId,
-    //   author: args.author,
-    //   format: "image",
-    // });
+    const { thumbnailId, glbId, title, description, creatorId } = args;
+    await ctx.db.insert("uploaded", {
+      thumbnailId,
+      glbId,
+      title,
+      description,
+      creatorId,
+    });
   },
 });
