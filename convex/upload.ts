@@ -9,10 +9,10 @@ export const generateUploadUrl = mutation({
 
 export const uploadFiles = mutation({
   args: {
-    thumbnailId: v.string(),
+    description: v.optional(v.string()),
+    thumbnailId: v.optional(v.string()),
     glbId: v.string(),
     title: v.string(),
-    description: v.string(),
     creatorId: v.string(),
   },
   handler: async (ctx, args) => {

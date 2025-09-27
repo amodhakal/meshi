@@ -16,8 +16,8 @@ export default function UploadPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [glbFile, setGlbFile] = useState<File | null>();
-  const [thumbnailFile, setThumbnailFile] = useState<File | null>();
+  const [glbFile, setGlbFile] = useState<File | null>(null);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
   const user = useAuth();
   if (!user.isSignedIn) {
@@ -61,9 +61,7 @@ export default function UploadPage() {
               className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
             >
               <span className="text-gray-600">
-                {glbFile
-                  ? glbFile.name
-                  : "Click to upload .glb file"}
+                {glbFile ? glbFile.name : "Click to upload .glb file"}
               </span>
               <input
                 onChange={(e) => setGlbFile(e.target.files![0])}
@@ -118,20 +116,8 @@ export default function UploadPage() {
       });
     }
 
-    if (!description) {
-      return toast("Missing description", {
-        style: { backgroundColor: "red", color: "white" },
-      });
-    }
-
     if (!glbFile) {
       return toast("Missing .glb file", {
-        style: { backgroundColor: "red", color: "white" },
-      });
-    }
-
-    if (!thumbnailFile) {
-      return toast("Missing thumbnail file", {
         style: { backgroundColor: "red", color: "white" },
       });
     }
@@ -147,7 +133,11 @@ export default function UploadPage() {
       handleUpload(thumbnailUrl, thumbnailFile),
     ]);
 
-    const [glbId, thumbnailId] = data as [string, string];
+    const [glbId, thumbnailId] = data;
+    if (!glbId) {
+      toast("Unsuccesful upload");
+      return;
+    }
 
     uploadFiles({ thumbnailId, glbId, title, description, creatorId });
 
@@ -157,7 +147,11 @@ export default function UploadPage() {
     setThumbnailFile(null);
     toast("Meshi submitted");
 
-    async function handleUpload(url: string, file: File) {
+    async function handleUpload(url: string, file: File | null) {
+      if (!file) {
+        return undefined;
+      }
+
       const result = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": file.type },
@@ -165,7 +159,7 @@ export default function UploadPage() {
       });
 
       const { storageId } = await result.json();
-      return storageId;
+      return storageId as string;
     }
   }
 }
