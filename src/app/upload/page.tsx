@@ -2,13 +2,10 @@
 
 import Container from "@/components/Container";
 import { RedirectToSignIn, useAuth } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 import { useMutation } from "convex/react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../../../convex/_generated/api";
-import { VId } from "convex/values";
-import { Id } from "../../../convex/_generated/dataModel";
 
 export default function UploadPage() {
   const generateUploadUrl = useMutation(api.upload.generateUploadUrl);
@@ -135,7 +132,7 @@ export default function UploadPage() {
 
     const [glbId, thumbnailId] = data;
     if (!glbId) {
-      toast("Unsuccesful upload");
+      toast("Unsuccesful handleUpload");
       return;
     }
 
