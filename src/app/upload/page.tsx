@@ -29,7 +29,9 @@ export default function UploadPage() {
         </h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
-            <label htmlFor="title">Title: <span className="text-red-500">*</span> </label>
+            <label htmlFor="title">
+              Enter title <span className="text-red-500">*</span>{" "}
+            </label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -41,7 +43,7 @@ export default function UploadPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="description">Description: </label>
+            <label htmlFor="description">Enter description </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -52,7 +54,9 @@ export default function UploadPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="designFile">Upload .glb File <span className="text-red-500">*</span></label>
+            <label htmlFor="designFile">
+              Upload .glb File <span className="text-red-500">*</span>
+            </label>
             <label
               htmlFor="designFile"
               className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
@@ -72,7 +76,9 @@ export default function UploadPage() {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <label htmlFor="thumbnail">Upload Thumbnail</label>
+              <label htmlFor="thumbnail">
+                Upload Thumbnail <span className="text-red-500">*</span>
+              </label>
               <label
                 htmlFor="thumbnail"
                 className="border border-dashed border-gray-400 rounded-lg px-4 py-6 text-center cursor-pointer hover:bg-gray-100"
@@ -119,6 +125,12 @@ export default function UploadPage() {
       });
     }
 
+    if (!thumbnailFile) {
+      return toast("Missing thumbnail", {
+        style: { backgroundColor: "red", color: "white" },
+      });
+    }
+
     const glbUrl = await generateUploadUrl();
     const thumbnailUrl = await generateUploadUrl();
 
@@ -144,11 +156,7 @@ export default function UploadPage() {
     setThumbnailFile(null);
     toast("Meshi submitted");
 
-    async function handleUpload(url: string, file: File | null) {
-      if (!file) {
-        return undefined;
-      }
-
+    async function handleUpload(url: string, file: File) {
       const result = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": file.type },

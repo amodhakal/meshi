@@ -10,7 +10,7 @@ export const generateUploadUrl = mutation({
 export const uploadFiles = mutation({
   args: {
     description: v.optional(v.string()),
-    thumbnailId: v.optional(v.string()),
+    thumbnailId: v.string(),
     glbId: v.string(),
     title: v.string(),
     creatorId: v.string(),
