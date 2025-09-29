@@ -112,6 +112,7 @@ export default function UploadPage() {
 
   async function handleSubmit(ev: FormEvent) {
     ev.preventDefault();
+    toast("Uploading meshi");
 
     if (!title) {
       return toast("Missing title", {

@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as query from "../query.js";
 import type * as upload from "../upload.js";
 
 /**
@@ -24,6 +25,7 @@ import type * as upload from "../upload.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  query: typeof query;
   upload: typeof upload;
 }>;
 export declare const api: FilterApi<
